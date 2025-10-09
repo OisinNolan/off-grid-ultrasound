@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     libopencv-dev \
     git \
     wget \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 
