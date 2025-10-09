@@ -49,9 +49,5 @@ RUN cp /root/.local/bin/uv /usr/local/bin/uv && chmod +x /usr/local/bin/uv
 USER $USERNAME
 WORKDIR /working_directory
 
-ENV UV_LINK_MODE=copy
-COPY pyproject.toml uv.lock ./
-RUN uv sync
-
 # Reset DEBIAN_FRONTEND to its default value
 ENV DEBIAN_FRONTEND=
