@@ -31,7 +31,7 @@ docker build -t infer --build-arg USERNAME=myname .
 
 Replace `myname` with your username.
 
-If you want to use your own user ID and group ID (to avoid permission issues with the mounted volumes), you can pass the `USER_ID` and `GROUP_ID` build arguments. You can find your user ID and group ID by running `id -u` and `id -g` in your terminal, respectively.
+If you want to use your own user ID and group ID (to avoid permission issues with the mounted volumes on Linux), you can pass the `USER_ID` and `GROUP_ID` build arguments. You can find your user ID and group ID by running `id -u` and `id -g` in your terminal, respectively.
 For example, if your user ID is `1000` and your group ID is `1000`, you can build the docker image with the following command:
 
 ```bash
@@ -41,7 +41,7 @@ docker build -t infer --build-arg USERNAME=myname --build-arg USER_ID=1000 --bui
 ### Running the docker container
 #### On linux/macos
 ```bash
-docker run --hostname vm --gpus all -v $(pwd):/working_directory -it infer bash
+docker run --hostname vm --gpus all -v $(pwd):/working_directory -w /working_directory -e UV_CACHE_DIR=/working_directory/.uv_cache -it infer bash
 ```
 #### On windows
 In Powershell enter
@@ -52,10 +52,13 @@ docker run --hostname vm --gpus all -v ${pwd}:/working_directory -e UV_CACHE_DIR
 ## Downloading the data
 Download the data files from the [Zenodo repository](https://zenodo.org/records/14925758) and place them in the `data` folder.
 
-Alternatively (on linux or in docker) you can use the script `shell/get-data.sh` from the root of the repository.
+Alternatively (on linux or in docker) you can use the script `shell/get-data.sh` from the root of the repository. Run it as follows:
+```bash
+bash shell/get-data.sh
+```
 
 ## Running the code
 ### Running an example
 ```bash
-python main.py config/regular_runs/carotid/carotid_sa_1.yaml
+uv run main.py config/regular_runs/carotid/carotid_sa_1.yaml
 ```
