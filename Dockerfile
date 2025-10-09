@@ -52,6 +52,7 @@ WORKDIR /working_directory
 
 COPY .python-version .
 RUN uv python install $(cat .python-version)
+ENV PATH="/working_directory/.venv/bin:$PATH"
 
 # Reset DEBIAN_FRONTEND to its default value
 ENV DEBIAN_FRONTEND=
