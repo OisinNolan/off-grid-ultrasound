@@ -39,8 +39,14 @@ docker build -t infer --build-arg USERNAME=myname --build-arg USER_ID=1000 --bui
 ```
 
 ### Running the docker container
+#### On linux/macos
 ```bash
 docker run --hostname vm --gpus all -v $(pwd):/working_directory -it infer bash
+```
+#### On windows
+In Powershell enter
+```powershell
+docker run --hostname vm --gpus all -v ${pwd}:/working_directory -e UV_CACHE_DIR=/working_directory/.uv_cache -it infer bash
 ```
 
 ## Downloading the data

@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     libopencv-dev \
     git \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -48,6 +49,9 @@ RUN cp /root/.local/bin/uv /usr/local/bin/uv && chmod +x /usr/local/bin/uv
 
 USER $USERNAME
 WORKDIR /working_directory
+
+COPY .python-version .
+RUN uv python install $(cat .python-version)
 
 # Reset DEBIAN_FRONTEND to its default value
 ENV DEBIAN_FRONTEND=
