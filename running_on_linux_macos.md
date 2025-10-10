@@ -38,6 +38,8 @@ docker build -t infer --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 .
 docker run --gpus all -v $(pwd):/working_directory -w /working_directory -e UV_CACHE_DIR=/working_directory/.uv_cache -it infer bash
 ```
 
+You can also [run the docker image in a VSCode devcontainer](running_in_a_devcontainer.md).
+
 ## Downloading the data
 Download the data files from the [Zenodo repository](https://zenodo.org/records/14925758) and place them in the `data` folder.
 
@@ -47,7 +49,9 @@ bash shell/get-data.sh
 ```
 
 ## Running the code
-### Running an example
-```bash
-uv run main.py config/regular_runs/carotid/carotid_sa_1.yaml
+> **Note**
+> When using uv you can either run the code with `uv run main.py` each time, or run `uv sync` once and then use `python main.py` directly.
+```powershell
+uv sync
+python main.py config/regular_runs/carotid/carotid_sa_1.yaml
 ```
