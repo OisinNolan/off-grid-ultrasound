@@ -1,5 +1,5 @@
 # The path to the HDF5 file to load the data from
-path: usbmd/2024-04-09/L11-5v_carotid_cross_safety_0001.hdf5
+path: /mnt/z/Ultrasound-BMd/data/vincent/data/verasonics/usbmd/2024-04-09/L11-5v_carotid_cross_safety_0001.hdf5 # usbmd/2024-04-09/L11-5v_carotid_cross_safety_0001.hdf5
 
 
 # Defining the scatterers
@@ -17,7 +17,7 @@ path: usbmd/2024-04-09/L11-5v_carotid_cross_safety_0001.hdf5
 target_region_mm: [-20, 20, 2, 25]
 
 # The number of points in the initial grid (x, z) or (x, y, z)
-grid_shape: [384, 256]
+grid_shape: [128, 128] # [384, 256]
 
 # The spacing between points in the initial grid in wavelengths of the transducer center frequency (x, z) or (x, y, z)
 grid_spacing_wl: #[0.5, 0.5]
@@ -49,13 +49,13 @@ transmits: 138
 # -> The same as wavefront_only_general but computes the delays with lens correction once and then interpolates from these
 # virtual_source:
 # -> The transmit delay is computed from a virtual focus point
-forward_model_type: fully_general
+forward_model_type: wavefornt_only_general # fully_general
 
 n_iterations: 15000
 
 plot_interval: 5000
 
-batch_size: 64
+batch_size: 32 # 64
 
 gradient_accumulation: 8
 
@@ -106,7 +106,7 @@ lens_thickness_mm: 0.74
 
 f_number: 3.5
 
-progress_bars: false
+progress_bars: true
 
 run_name: carotid_pw
 

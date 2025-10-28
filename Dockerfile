@@ -1,59 +1,19 @@
-# Use the JAX toolbox image
-FROM nvidia/cuda:12.4.1-base-ubuntu22.04
+FROM zeahub/all:v0.0.4
 
-# Set environment variables
-ENV WORKING_DIRECTORY=/working_directory
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        dvipng \
+        texlive-latex-extra \
+        texlive-fonts-recommended \
+        cm-super && \
+    rm -rf /var/lib/apt/lists/*
 
-# Use noninteractive to avoid interactive prompts during build
-ENV DEBIAN_FRONTEND=noninteractive
+# Set working directory
+WORKDIR /workspace
 
-# Update the package list and install system dependencies
-RUN apt-get update && apt-get install -y \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    libglib2.0-0 \
-    ffmpeg \
-    libopencv-dev \
-    git \
-    wget \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+# Copy requirements.txt into the container
+COPY requirements.txt .
 
-
-ARG USER_ID=1000
-ARG GROUP_ID=1000
-ARG USERNAME=user
-
-# Ensure the sudoers.d directory exists
-RUN mkdir -p /etc/sudoers.d/
-
-# Create user
-RUN groupadd --gid $GROUP_ID $USERNAME && \
-    useradd --uid $USER_ID --gid $GROUP_ID -m --shell /bin/bash $USERNAME && \
-    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
-    chmod 0440 /etc/sudoers.d/$USERNAME
-
-# The installer requires curl (and certificates) to download the release archive
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
-
-# Download the latest installer
-ADD https://astral.sh/uv/install.sh /uv-installer.sh
-
-# Run the installer then remove it
-RUN sh /uv-installer.sh && rm /uv-installer.sh
-
-# Ensure the installed binary is on the `PATH`
-ENV PATH="/root/.local/bin/:$PATH"
-
-RUN cp /root/.local/bin/uv /usr/local/bin/uv && chmod +x /usr/local/bin/uv
-
-USER $USERNAME
-WORKDIR /working_directory
-
-COPY .python-version .
-RUN uv python install $(cat .python-version)
-ENV PATH="/working_directory/.venv/bin:$PATH"
-
-# Reset DEBIAN_FRONTEND to its default value
-ENV DEBIAN_FRONTEND=
+# Install all packages from requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt

@@ -1367,8 +1367,11 @@ def infer(
     # ==========================================================================
     # Main optimization loop
     # ==========================================================================
+    # prediction_batch_size = jnp.clip(
+    #     256 // forward_settings.active_element_idx.shape[1], 64, None
+    # )
     prediction_batch_size = jnp.clip(
-        256 // forward_settings.active_element_idx.shape[1], 64, None
+        256 // forward_settings.active_element_idx.shape[1], 16, None
     )
 
     last_loss = -1
